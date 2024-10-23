@@ -4,6 +4,10 @@
 	"description": "AnnictのAPIを使って作品の検索と記録をするライブラリ",
 	"author": "ches3",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ches3/annict-search.git"
+	},
 	"type": "module",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
