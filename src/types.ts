@@ -3,6 +3,28 @@ import type {
 	Work as AnnictWork,
 } from "./gql/generated";
 
+export type SearchParam =
+	| {
+			title: string;
+	  }
+	| {
+			workTitle: string;
+			episodeTitle: string;
+	  }
+	| {
+			workTitle: string;
+			episodeNumber: string;
+			episodeTitle: string;
+	  };
+
+export type SearchResult =
+	| {
+			id: string;
+			title: string;
+			episode: Episode | undefined;
+	  }
+	| undefined;
+
 export type Work = {
 	id: string;
 	title: string;
