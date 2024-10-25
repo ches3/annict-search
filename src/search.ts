@@ -1,4 +1,4 @@
-import type { Episode } from "./types";
+import type { SearchParam, SearchResult } from "./types";
 import { searchWorks } from "./util/annict";
 import { extract } from "./util/extract/extract";
 import { isSameTitle } from "./util/normalize";
@@ -8,36 +8,19 @@ import { variants } from "./util/search/variants";
 export function search(
 	params: { title: string },
 	token: string,
-): Promise<
-	| {
-			id: string;
-			title: string;
-			episode: Episode | undefined;
-	  }
-	| undefined
->;
+): Promise<SearchResult>;
 export function search(
 	params: { workTitle: string; episodeTitle: string },
 	token: string,
-): Promise<
-	| {
-			id: string;
-			title: string;
-			episode: Episode | undefined;
-	  }
-	| undefined
->;
-export async function search(
-	params: { title: string } | { workTitle: string; episodeTitle: string },
+): Promise<SearchResult>;
+export function search(
+	params: { workTitle: string; episodeNumber: string; episodeTitle: string },
 	token: string,
-): Promise<
-	| {
-			id: string;
-			title: string;
-			episode: Episode | undefined;
-	  }
-	| undefined
-> {
+): Promise<SearchResult>;
+export async function search(
+	params: SearchParam,
+	token: string,
+): Promise<SearchResult> {
 	const target = "title" in params ? extract(params) : extract(params);
 	const words = variants(target.workTitle);
 	const works = await searchWorks(words, token);

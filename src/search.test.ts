@@ -195,6 +195,112 @@ afterEach(() => {
 	vi.restoreAllMocks();
 });
 
+describe("workTitle & episodeNumber & episodeTitle", () => {
+	test("返り値を確認", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響け！ユーフォニアム",
+				episodeNumber: "第一回",
+				episodeTitle: "ようこそハイスクール",
+			},
+			"token",
+		);
+		expect(result).toEqual({
+			id: "V29yay00MzA4",
+			title: "響け！ユーフォニアム",
+			episode: {
+				id: "RXBpc29kZS0xODM1Mg==",
+				number: 1,
+				numberText: "第一回",
+				title: "ようこそハイスクール",
+			},
+		});
+	});
+
+	test("エピソードタイトルを省略", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響け！ユーフォニアム",
+				episodeNumber: "第一回",
+				episodeTitle: "",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS0xODM1Mg==");
+	});
+
+	test("話数を省略", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響け！ユーフォニアム",
+				episodeNumber: "",
+				episodeTitle: "ようこそハイスクール",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS0xODM1Mg==");
+	});
+
+	test("タイトルが一致しない場合", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響けユーフォニアム",
+				episodeNumber: "第一回",
+				episodeTitle: "ようこそハイスクール",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS0xODM1Mg==");
+	});
+
+	test("タイトルが一致しない場合 (エピソードタイトルを省略)", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響けユーフォニアム",
+				episodeNumber: "第一回",
+				episodeTitle: "",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual(undefined);
+	});
+
+	test("エピソードがない作品", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "劇場版 響け！ユーフォニアム～誓いのフィナーレ～",
+				episodeNumber: "",
+				episodeTitle: "",
+			},
+			"token",
+		);
+		expect(result).toEqual({
+			id: "V29yay01MzQw",
+			title: "劇場版 響け！ユーフォニアム～誓いのフィナーレ～",
+			episode: undefined,
+		});
+	});
+
+	test("存在しないタイトル", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce([]);
+		const result = await search(
+			{
+				workTitle: "",
+				episodeNumber: "",
+				episodeTitle: "",
+			},
+			"",
+		);
+		expect(result).toBe(undefined);
+	});
+});
+
 describe("workTitle & episodeTitle", () => {
 	test("返り値を確認", async () => {
 		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);

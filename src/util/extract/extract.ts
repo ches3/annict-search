@@ -1,4 +1,4 @@
-import type { ExtractedEpisode } from "../../types";
+import type { ExtractedEpisode, SearchParam } from "../../types";
 import { episodeNumberMatches } from "../match";
 import { parseNumber } from "./number";
 
@@ -24,9 +24,28 @@ export function extract(params: { workTitle: string; episodeTitle: string }): {
 	workTitle: string;
 	episode: ExtractedEpisode | undefined;
 };
-export function extract(
-	params: { title: string } | { workTitle: string; episodeTitle: string },
-): { workTitle: string; episode: ExtractedEpisode | undefined } {
+export function extract(params: {
+	workTitle: string;
+	episodeNumber: string;
+	episodeTitle: string;
+}): {
+	workTitle: string;
+	episode: ExtractedEpisode | undefined;
+};
+export function extract(params: SearchParam): {
+	workTitle: string;
+	episode: ExtractedEpisode | undefined;
+} {
+	if ("episodeNumber" in params) {
+		return {
+			workTitle: params.workTitle,
+			episode: {
+				number: parseNumber(params.episodeNumber),
+				numberText: params.episodeNumber,
+				title: params.episodeTitle,
+			},
+		};
+	}
 	if ("title" in params) {
 		const target = extractFullTitle(params.title);
 		return {
