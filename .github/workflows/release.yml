@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Generate token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build project
+        run: bun run build
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Get before version
+        run: echo BEFORE_VERSION=v$(cat package.json | jq -r .version) >> $GITHUB_ENV
+
+      - name: Bump version
+        run: npm version ${{ inputs.bump_type }}
+
+      - name: Get after version
+        run: echo AFTER_VERSION=v$(cat package.json | jq -r .version) >> $GITHUB_ENV
+
+      - name: Create branch
+        run: git checkout -b release-${AFTER_VERSION}
+
+      - name: Create pull request & merge
+        run: |
+          git push origin release-${AFTER_VERSION} --follow-tags
+          gh pr create --title "Bump version to ${AFTER_VERSION}" --body "" --base main --head release-${AFTER_VERSION}
+          gh pr merge release-${AFTER_VERSION} --auto --merge --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Create GitHub Release
+        run: |
+          gh release create ${AFTER_VERSION} --generate-notes --notes-start-tag ${BEFORE_VERSION}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
