@@ -66,8 +66,9 @@ jobs:
 
       - name: Create pull request & merge
         run: |
+          git add package.json
           git commit -m $AFTER_VERSION
-          git push origin release-${AFTER_VERSION} --follow-tags
+          git push origin release-${AFTER_VERSION}
           gh pr create --title "Bump version to ${AFTER_VERSION}" --body "" --base main --head release-${AFTER_VERSION}
           gh pr merge release-${AFTER_VERSION} --auto --merge --delete-branch
         env:
