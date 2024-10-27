@@ -30,6 +30,7 @@ export type Work = {
 	title: string;
 	noEpisodes: boolean;
 	episodes: Episode[] | undefined;
+	seriesList: string[] | undefined;
 };
 
 export type Episode = {

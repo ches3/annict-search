@@ -28,7 +28,16 @@ export async function search(
 	for (const work of works) {
 		// タイトルが一致しない場合はスキップ
 		if (!isSameTitle(work.title, target.workTitle)) {
-			continue;
+			if (!work.seriesList) {
+				continue;
+			}
+			// "シリーズ名 タイトル"の形式で一致するか確認
+			const series = work.seriesList.find((series) =>
+				isSameTitle(`${series} ${work.title}`, target.workTitle),
+			);
+			if (!series) {
+				continue;
+			}
 		}
 
 		// 映画などのエピソードがない作品

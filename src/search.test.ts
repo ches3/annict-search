@@ -97,6 +97,7 @@ const mockValue: Work[] = [
 				numberText: "番外編",
 			},
 		],
+		seriesList: ["響け！ユーフォニアム"],
 	},
 	{
 		id: "V29yay00ODI2",
@@ -182,12 +183,14 @@ const mockValue: Work[] = [
 				numberText: "最終回",
 			},
 		],
+		seriesList: ["響け！ユーフォニアム"],
 	},
 	{
 		id: "V29yay01MzQw",
 		title: "劇場版 響け！ユーフォニアム～誓いのフィナーレ～",
 		noEpisodes: true,
 		episodes: [],
+		seriesList: ["響け！ユーフォニアム"],
 	},
 ];
 
@@ -285,6 +288,19 @@ describe("workTitle & episodeNumber & episodeTitle", () => {
 			title: "劇場版 響け！ユーフォニアム～誓いのフィナーレ～",
 			episode: undefined,
 		});
+	});
+
+	test("'シリーズ名 シーズンタイトル'の形式", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響け！ユーフォニアム 響け！ユーフォニアム2",
+				episodeNumber: "第一回",
+				episodeTitle: "",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS03NzU4Nw==");
 	});
 
 	test("存在しないタイトル", async () => {
@@ -392,6 +408,18 @@ describe("workTitle & episodeTitle", () => {
 		const result = await search({ workTitle: "", episodeTitle: "" }, "");
 		expect(result).toBe(undefined);
 	});
+
+	test("'シリーズ名 シーズンタイトル'の形式", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				workTitle: "響け！ユーフォニアム 響け！ユーフォニアム2",
+				episodeTitle: "第一回",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS03NzU4Nw==");
+	});
 });
 
 describe("title", () => {
@@ -461,6 +489,17 @@ describe("title", () => {
 			title: "劇場版 響け！ユーフォニアム～誓いのフィナーレ～",
 			episode: undefined,
 		});
+	});
+
+	test("'シリーズ名 シーズンタイトル'の形式", async () => {
+		vi.mocked(searchWorks).mockResolvedValueOnce(mockValue);
+		const result = await search(
+			{
+				title: "響け！ユーフォニアム 響け！ユーフォニアム2 第一回",
+			},
+			"token",
+		);
+		expect(result?.episode?.id).toEqual("RXBpc29kZS03NzU4Nw==");
 	});
 
 	test("存在しないタイトル", async () => {

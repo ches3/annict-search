@@ -12,6 +12,11 @@ query searchWorks($titles: [String!]) {
 					numberText
 				}
 			}
+			seriesList {
+				nodes {
+					name
+				}
+			}
 		}
 	}
 }
