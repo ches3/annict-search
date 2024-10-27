@@ -129,8 +129,8 @@ export function normalize(title: string, options?: Options): string {
 	return normalizedTitle;
 }
 
-export function normalizeAll(str: string): string {
-	return normalize(str, {
+export function isSameTitle(a: string, b: string, weak = false): boolean {
+	const options = {
 		lowerCase: true,
 		zenhan: {
 			alphabet: true,
@@ -149,10 +149,8 @@ export function normalizeAll(str: string): string {
 			space: true,
 			anime: true,
 			bracket: true,
+			nonNumAndLetter: weak,
 		},
-	});
-}
-
-export function isSameTitle(a: string, b: string): boolean {
-	return normalizeAll(a) === normalizeAll(b);
+	};
+	return normalize(a, options) === normalize(b, options);
 }

@@ -9,7 +9,9 @@ export function findEpisode(
 	// タイトルが一致するエピソード
 	const episodeByTitle = episodes.find(
 		(episode) =>
-			episode.title && target.title && isSameTitle(episode.title, target.title),
+			episode.title &&
+			target.title &&
+			isSameTitle(episode.title, target.title, true),
 	);
 	if (episodeByTitle) {
 		return episodeByTitle;
@@ -25,7 +27,7 @@ export function findEpisode(
 		(episode) =>
 			episode.numberText &&
 			target.numberText &&
-			isSameTitle(episode.numberText, target.numberText),
+			isSameTitle(episode.numberText, target.numberText, true),
 	);
 	if (episodeByNumberText) {
 		return episodeByNumberText;
