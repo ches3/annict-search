@@ -42,11 +42,16 @@ export async function searchWorks(
 				)
 				.filter((episode) => !!episode);
 
+			const seriesList = work.seriesList?.nodes
+				?.map((series) => series?.name)
+				.filter((name) => name !== undefined);
+
 			return {
 				id: work.id,
 				title: work.title,
 				noEpisodes: work.noEpisodes,
 				episodes: episodes,
+				seriesList: seriesList,
 			};
 		})
 		.filter((work) => !!work);
