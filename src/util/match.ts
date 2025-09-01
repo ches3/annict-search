@@ -142,6 +142,7 @@ export const episodeNumberMatches = [
 		`予約${num}`,
 		`【MISSION：${num}】`,
 		`${num}日記`,
+		`すてっぷ${num}`,
 	],
 	...[
 		"最終話",
