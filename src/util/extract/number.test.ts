@@ -87,6 +87,30 @@ describe("ローマ数字", () => {
 	});
 });
 
+describe("丸数字", () => {
+	test("①", () => {
+		expect(parseNumber("①")).toBe(1);
+	});
+	test("⑨", () => {
+		expect(parseNumber("⑨")).toBe(9);
+	});
+	test("⑩", () => {
+		expect(parseNumber("⑩")).toBe(10);
+	});
+	test("⑳", () => {
+		expect(parseNumber("⑳")).toBe(20);
+	});
+	test("㉑", () => {
+		expect(parseNumber("㉑")).toBe(21);
+	});
+	test("㊿", () => {
+		expect(parseNumber("㊿")).toBe(50);
+	});
+	test("①②", () => {
+		expect(parseNumber("①②")).toBe(undefined);
+	});
+});
+
 describe("無効な入力", () => {
 	test("", () => {
 		expect(parseNumber("")).toBe(undefined);
