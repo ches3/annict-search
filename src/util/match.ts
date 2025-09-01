@@ -2,12 +2,14 @@ const zen = "０-９";
 const kanji =
 	"〇一二三四五六七八九十百千零壱壹弐弍貳貮参參肆伍陸漆捌玖拾廿陌佰阡仟";
 const roman = "IVXLCDM";
+const circle =
+	"①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿";
 
 const numChars = {
 	zen,
 	kanji,
 	roman,
-	all: `\\d${zen}${kanji}${roman}`,
+	all: `\\d${zen}${kanji}${roman}${circle}`,
 };
 
 const num = `[${numChars.all}]+`;
@@ -17,6 +19,7 @@ export const numMatch = {
 	zen: /[０-９]+/g,
 	kanji: new RegExp(`[${kanji}]+`, "g"),
 	roman: new RegExp(`[${roman}]+`, "g"),
+	circle: new RegExp(`[${circle}]+`, "g"),
 	all: new RegExp(`[${numChars.all}]+`, "g"),
 };
 

@@ -47,6 +47,25 @@ function roman(str: string): number | undefined {
 	}
 }
 
+const circledNumbers =
+	"①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳㉑㉒㉓㉔㉕㉖㉗㉘㉙㉚㉛㉜㉝㉞㉟㊱㊲㊳㊴㊵㊶㊷㊸㊹㊺㊻㊼㊽㊾㊿";
+
+function circle(str: string): number | undefined {
+	const match = str.match(numMatch.circle);
+	if (!match) {
+		return;
+	}
+	const circleChar = match[0];
+	// "①②" のような複数文字に対応しない
+	if ([...circleChar].length > 1) {
+		return;
+	}
+	const num = circledNumbers.indexOf(circleChar);
+	if (num !== -1) {
+		return num + 1;
+	}
+}
+
 export function parseNumber(str: string): number | undefined {
-	return normal(str) || zen(str) || kansuji(str) || roman(str);
+	return normal(str) || zen(str) || kansuji(str) || roman(str) || circle(str);
 }
